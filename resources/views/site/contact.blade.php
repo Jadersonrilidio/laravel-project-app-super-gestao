@@ -1,21 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
-</head>
+@extends('site.layouts.basic')
 
-<body>
+@section('title', $title ?? 'Super Manager')
+
+@section('content')
+
+    @include('site.layouts._partials.top')
+
+    <div class="conteudo-pagina">
+        <div class="titulo-pagina">
+            <h1>Get in touch with us</h1>
+        </div>
+
+        <div class="informacao-pagina">
+            <div class="contato-principal">
+
+                @component('site.layouts._components.form_contact', [
+                    'class' => 'borda-preta',
+                    'page' => $page,
+                    'reasons_contact' => $reasons_contact
+                ])
+                    @if($request_method == 'POST')
+                        <p>Form successfully sent! Please kindly wait for our reply</p>
+                        <p>Thanks for contacting us! - Ass: Super manager team</p>
+                    @endif
+                @endcomponent
+
+            </div>
+        </div>  
+    </div>
+
+    @include('site.layouts._partials.foot')
     
-    <h3>Contact (view)</h3>
-
-    <ul>
-        <li> <a href="/">Principal</a> </li>
-        <li> <a href="/about">About</a> </li>
-        <li> <a href="/contact">Contact</a> </li>
-    </ul>
-
-</body>
-</html>
+@endsection

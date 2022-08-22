@@ -1,21 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal</title>
-</head>
+@extends('site.layouts.basic')
 
-<body>
+@section('title', $title)
+
+@section('content')
+
+    @include('site.layouts._partials.top')
+
+    <div class="conteudo-destaque">
     
-    <h3>Principal (view)</h3>
+        <div class="esquerda">
+            <div class="informacoes">
+                <h1>Super Manager System</h1>
+                <p>The ideal entepreuneur management software for your business.<p>
+                <div class="chamada">
+                    <img src="{{ asset('/img/check.png') }}">
+                    <span class="texto-branco">Easy and complete management</span>
+                </div>
+                <div class="chamada">
+                    <img src="{{ asset('/img/check.png') }}">
+                    <span class="texto-branco">Your company on the clouds</span>
+                </div>
+            </div>
 
-    <ul>
-        <li> <a href="/">Principal</a> </li>
-        <li> <a href="/about">About</a> </li>
-        <li> <a href="/contact">Contact</a> </li>
-    </ul>
+            <div class="video">
+                <img src="{{ asset('/img/player_video.jpg') }}">
+            </div>
+        </div>
 
-</body>
-</html>
+        <div class="direita">
+            <div class="contato">
+                <h1>Contact</h1>
+                <p>In any case of doubt, please contact our team by fulfilling the form below.<p>
+                
+                @component('site.layouts._components.form_contact', [
+                    'class' => 'borda-branca',
+                    'page' => $page,
+                    'reasons_contact' => $reasons_contact
+                ])
+                    @if($request_method == 'POST')
+                        <p>Form successfully sent! Please kindly wait for our reply</p>
+                        <p>Thanks for cnotacting us! - Ass: Super manager team</p>
+                    @endif
+                @endcomponent
+
+            </div>
+        </div>
+    </div>
+
+    @include('site.layouts._partials.foot')
+
+@endsection

@@ -8,6 +8,8 @@ class AboutController extends Controller
 {
     //
     public function about() {
-        return view('site.about');
+        return view('site.about', array(
+            'title' => 'Super Manager - About'
+        ));
     }
 }
