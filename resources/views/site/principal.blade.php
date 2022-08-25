@@ -34,12 +34,11 @@
                 
                 @component('site.layouts._components.form_contact', [
                     'class' => 'borda-branca',
-                    'page' => $page,
+                    'action_page' => $action_page,
                     'reasons_contact' => $reasons_contact
                 ])
                     @if($request_method == 'POST')
-                        <p>Form successfully sent! Please kindly wait for our reply</p>
-                        <p>Thanks for cnotacting us! - Ass: Super manager team</p>
+                        <p style="color:green">Form successfully sent! Please kindly wait for our reply, thanks for contacting us! - Ass: Super manager team</p>
                     @endif
                 @endcomponent
 

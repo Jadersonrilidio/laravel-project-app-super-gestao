@@ -9,6 +9,7 @@
             <li><a href="{{ route('site.index') }}">Principal</a></li>
             <li><a href="{{ route('site.about') }}">About</a></li>
             <li><a href="{{ route('site.contact') }}">Contact</a></li>
+            <li><a href="{{ route('site.login') }}">Login</a></li>
         </ul>
     </div>
 </div>

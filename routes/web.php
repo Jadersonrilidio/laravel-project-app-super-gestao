@@ -21,20 +21,44 @@ Route::get('/about', [App\Http\Controllers\AboutController::class, 'about'])->na
 Route::get('/contact', [App\Http\Controllers\ContactController::class, 'contact'])->name('site.contact');
 Route::post('/contact', [App\Http\Controllers\ContactController::class, 'post_contact'])->name('site.contact');
 
-Route::get('/login', [App\Http\Controllers\LoginController::class, 'login'])->name('site.login');
+Route::get('/login/{error?}', [App\Http\Controllers\LoginController::class, 'index'])->name('site.login');
+Route::post('/login', [App\Http\Controllers\LoginController::class, 'login'])->name('site.login');
 
-Route::prefix('/app')->group(function () {
-    Route::get('/clients', [App\Http\Controllers\ClientsController::class, 'index'])->name('app.clients');
-    Route::get('/suppliers', [App\Http\Controllers\SuppliersController::class, 'index'])->name('app.suppliers');
-    Route::get('/products', [App\Http\Controllers\ProductsController::class, 'index'])->name('app.products');
+Route::middleware('authentication:standard,visitor')->prefix('/app')->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('app.home');
+    Route::get('/client', [App\Http\Controllers\ClientController::class, 'index'])->name('app.client');
+
+    Route::prefix('/supplier')->group(function () {
+        Route::get('', [App\Http\Controllers\SupplierController::class, 'index'])->name('app.supplier.index');
+        
+        Route::get('/create', [App\Http\Controllers\SupplierController::class, 'create'])->name('app.supplier.create');
+        Route::post('/create', [App\Http\Controllers\SupplierController::class, 'create'])->name('app.supplier.create');
+        
+        Route::get('/list', [App\Http\Controllers\SupplierController::class, 'list'])->name('app.supplier.list');
+        Route::post('/list', [App\Http\Controllers\SupplierController::class, 'list'])->name('app.supplier.list');
+        
+        Route::get('/update/{id}', [App\Http\Controllers\SupplierController::class, 'update'])->name('app.supplier.update');
+        Route::post('/update/{id}', [App\Http\Controllers\SupplierController::class, 'update'])->name('app.supplier.update');
+        
+        Route::get('/delete/{id}', [App\Http\Controllers\SupplierController::class, 'delete'])->name('app.supplier.delete');
+    });
+
+    Route::resource('product', 'App\Http\Controllers\ProductController');
+
+    Route::get('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('app.logout');
 });
 
 Route::fallback(function () {
-    return '<h2>Route not found</h2> <ul>
-    <li> <a href="' . route('site.index') . '">Principal</a> </li>
-    <li> <a href="' . route('site.about') . '">About</a> </li>
-    <li> <a href="' . route('site.contact') . '">Contact</a> </li>
-    <li> <a href="' . route('site.login') . '">Login</a> </li> </ul>';
+    return '
+        <h2> Route not found </h2>
+        <ul>
+            <li> <a href="' . route('site.index') .   '">Principal </a> </li>
+            <li> <a href="' . route('site.about') .   '">About     </a> </li>
+            <li> <a href="' . route('site.contact') . '">Contact   </a> </li>
+            <li> <a href="' . route('site.login') .   '">Login     </a> </li>
+            <br><br><br>
+            <li> <a href="' . route('app.home') .     '">Home      </a> </li>
+        </ul>';
 });
 
 // Route::get('/route1', function () {

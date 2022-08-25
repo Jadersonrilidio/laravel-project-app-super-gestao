@@ -14,7 +14,7 @@ class AlterSuppliersNewColumns extends Migration
     public function up()
     {
         Schema::table('suppliers', function (Blueprint $table) {
-            $table->string('email', 128)->after('name')->nullable();
+            $table->string('email', 128)->unique()->after('name')->nullable();
             $table->string('uf', 2)->after('name')->nullable();
         });
     }
