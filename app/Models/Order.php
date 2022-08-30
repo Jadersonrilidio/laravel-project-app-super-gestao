@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier extends Model
+class Order extends Model
 {
     use HasFactory;
 
@@ -13,24 +13,29 @@ class Supplier extends Model
      * Dictates the referenced database table name related to this model.
      * 
      * @var string
-     * 
      */
-    protected $table = 'suppliers';
+    protected $table = 'orders';
 
     /**
      * Allow the following table fields named in array to be autocompleted by Eloquent engine.
      * 
      * @var array
+     */
+    protected $fillable = ['client_id'];
+
+    /**
      * 
      */
-    protected $fillable = ['name', 'uf', 'email'];
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }
 
     /**
      * 
      */
     public function products()
     {
-        return $this->hasMany('App\Models\Product', 'supplier_id', 'id');
-        // return $this->hasMany('App\Models\Product');
+        return $this->belongsToMany('App\Models\Product', 'order_products', 'order_id', 'product_id')->withPivot('id', 'created_at', 'quantity');
     }
 }

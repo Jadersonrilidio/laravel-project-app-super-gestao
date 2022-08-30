@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Unit;
 
@@ -30,6 +31,7 @@ class ProductController extends Controller
     protected $rules = array(
         'name'        => 'required|min:3|max:40',
         'description' => 'required|max:1000',
+        'supplier_id' => 'exists:suppliers,id',
         'weight'      => 'required|integer',
         'unit_id'     => 'exists:units,id',
     );
@@ -40,12 +42,13 @@ class ProductController extends Controller
      * @var array
      */
     protected $feedback = array(
-        'name.min'       => "The :attribute must have between 3 and 40 characters",
-        'name.max'       => "The :attribute must have between 3 and 40 characters",
-        'decription.max' => "The :attribute must have less than 2000 characters",
-        'weight.integer' => "The :attribute must be a integer number",
-        'unit_id.exists' => "invalid unit",
-        'required'       => "Field :attribute is required",
+        'name.min'           => "The :attribute must have between 3 and 40 characters",
+        'name.max'           => "The :attribute must have between 3 and 40 characters",
+        'decription.max'     => "The :attribute must have less than 2000 characters",
+        'weight.integer'     => "The :attribute must be a integer number",
+        'supplier_id.exists' => "invalid supplier",
+        'unit_id.exists'     => "invalid unit",
+        'required'           => "Field :attribute is required",
     );
 
     /**
@@ -55,10 +58,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $list = Product::paginate(5);
+        $title = $this->title . ' - List';
+        $list = Product::with('productDetail', 'supplier')->paginate(10);
 
         return view('app.product.index', [
-            'title' => $this->title . ' - List',
+            'title' => $title,
             'list'  => $list,
             'request'  => $request->all(),
         ]);
@@ -71,9 +75,14 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $title = $this->title . ' - Create';
+        $units = Unit::all();
+        $suppliers = Supplier::all('id', 'name');
+
         return view('app.product.create', [
-            'title' => $this->title . ' - Create',
-            'units' => Unit::all(),
+            'title'     => $title,
+            'units'     => $units,
+            'suppliers' => $suppliers,
         ]);
     }
 
@@ -89,7 +98,18 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
-        return redirect()->route('product.index');
+        $title = $this->title . ' - Create';
+        $units = Unit::all();
+        $suppliers = Supplier::all('id', 'name');
+        $message = 'New product created successfuly!';
+
+        return view('app.product.create', [
+            'title'     => $title,
+            'units'     => $units,
+            'suppliers' => $suppliers,
+            'message'   => $message,
+        ]);
+        // return redirect()->route('product.index');
     }
 
     /**
@@ -100,7 +120,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return 'Yes show!';
+        $title = $this->title . ' id ' . $product->id . ' - ' . $product->name;
+
+        return view('app.product.show', [
+            'title'   => $title,
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -111,7 +136,16 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return 'Yes edit!';
+        $title = $this->title . ' id ' . $product->id . ' - ' . $product->name . ' - Edit';
+        $units = Unit::all();
+        $suppliers = Supplier::all('id', 'name');
+
+        return view('app.product.edit', [
+            'title'     => $title,
+            'units'     => $units,
+            'product'   => $product,
+            'suppliers' => $suppliers,
+        ]);
     }
 
     /**
@@ -123,7 +157,22 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        return 'Yes update!';
+        $request->validate($this->rules, $this->feedback);
+
+        $product->update($request->all());
+
+        $title = $this->title . ' id ' . $product->id . ' - ' . $product->name . ' - Edit';
+        $units = Unit::all();
+        $suppliers = Supplier::all('id', 'name');
+        $message = 'Product updated successfuly!';
+
+        return view('app.product.edit', [
+            'title'     => $title,
+            'units'     => $units,
+            'product'   => $product,
+            'suppliers' => $suppliers,
+            'message'   => $message,
+        ]);
     }
 
     /**
@@ -134,6 +183,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        return 'Yes destroy!';
+        $product->delete();
+
+        return redirect()->route('product.index');
     }
 }

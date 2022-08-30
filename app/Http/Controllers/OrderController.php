@@ -4,30 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Client;
+use App\Models\Order;
 
-class ClientController extends Controller
+class OrderController extends Controller
 {
-    /**
-     * Page document title
-     * 
-     * @var string
-     */
-    protected $title = 'Super Manager - Clients';
-
     /**
      * 
      */
     protected $rules = [
-        'name' => 'required|min:3|max:64'
+        'client_id' => 'required|exists:clients,id',
     ];
 
     /**
      * 
      */
     protected $feedback = [
-        'name.required' => 'The name field is required',
-        'name.min' => 'The name must have between 3 and 64 characters',
-        'name.max' => 'The name must have between 3 and 64 characters',
+        'client_id.required' => 'The field client id is required',
+        'client_id.exists' => 'The client does not exist',
     ];
 
     /**
@@ -37,12 +30,12 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        $list = Client::paginate(10);
-        $title = 'Clients List';
+        $title = 'Order List';
+        $list = Order::paginate(10);
 
-        return view('app.client.index', [
-            'title' => $title,
-            'list'  => $list,
+        return view('app.order.index', [
+            'title'   => $title,
+            'list'    => $list,
             'request' => $request->all(),
         ]);
     }
@@ -55,9 +48,11 @@ class ClientController extends Controller
     public function create()
     {
         $title = 'Create Client';
+        $clients = Client::all('id', 'name');
 
-        return view('app.client.create', [
-            'title' => $title,
+        return view('app.order.create', [
+            'title'   => $title,
+            'clients' => $clients,
         ]);
     }
 
@@ -71,13 +66,15 @@ class ClientController extends Controller
     {
         $request->validate($this->rules, $this->feedback);
 
-        Client::create($request->all());
+        Order::create($request->all());
 
         $title = 'Create Client';
-        $message = 'New Client successfuly created!';
+        $clients = Client::all('id', 'name');
+        $message = 'New order placed successfuly!';
 
-        return view('app.client.create', [
-            'title' => $title,
+        return view('app.order.create', [
+            'title'   => $title,
+            'clients' => $clients,
             'message' => $message,
         ]);
     }

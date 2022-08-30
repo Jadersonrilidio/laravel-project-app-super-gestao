@@ -37,20 +37,43 @@
                             <th>Delete</th>
                         </tr>
                     </thead>
+
+                    <tbody>
                     @foreach($list as $supplier)
-                        <tbody>
-                            <tr>
-                                <td>{{ $supplier->id }}</td>
-                                <td>{{ $supplier->name }}</td>
-                                <td>{{ $supplier->uf }}</td>
-                                <td>{{ $supplier->email }}</td>
-                                <td>{{ $supplier->created_at }}</td>
-                                <td>{{ $supplier->updated_at }}</td>
-                                <td><a href="{{ route('app.supplier.update', $supplier->id) }}">Update</a></td>
-                                <td><a href="{{ route('app.supplier.delete', $supplier->id) }}">Delete</a></td>
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <td>{{ $supplier->id }}</td>
+                            <td>{{ $supplier->name }}</td>
+                            <td>{{ $supplier->uf }}</td>
+                            <td>{{ $supplier->email }}</td>
+                            <td>{{ $supplier->created_at }}</td>
+                            <td>{{ $supplier->updated_at }}</td>
+                            <td><a href="{{ route('app.supplier.update', $supplier->id) }}">Update</a></td>
+                            <td><a href="{{ route('app.supplier.delete', $supplier->id) }}">Delete</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <p>Products List</p>
+                                <table border="1" style="margin:20px">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                        <tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($supplier->products as $product)
+                                            <tr>
+                                                <td>{{ $product->id }}</td>
+                                                <td>{{ $product->name }}</td>
+                                            <tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                     @endforeach
+                    </tbody>
+
                 </table>
 
                 {{ $list->appends($request)->links() }}

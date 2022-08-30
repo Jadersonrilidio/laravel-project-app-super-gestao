@@ -25,6 +25,7 @@
                 <span>{{ $message ?? '' }}</span>
 
                 @component('app.product._components.form_create_edit', [
+                    'product'   => $product,
                     'units'     => $units,
                     'suppliers' => $suppliers,
                 ])

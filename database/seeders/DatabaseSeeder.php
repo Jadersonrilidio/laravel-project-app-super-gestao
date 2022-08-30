@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use \App\Models\Supplier;
 use \App\Models\SiteContact;
+use \App\Models\Supplier;
 use \App\Models\Product;
+use \App\Models\Client;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,9 +19,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ReasonContactSeeder::class);
         $this->call(UnitSeeder::class);
+        // $this->call(ClientSeeder::class, ['count' => 10]);
         
         SiteContact::factory(10)->create();
         Supplier::factory(10)->create();
-        Product::factory(20)->create();
+        Product::factory(10)->create();
+        Client::factory(10)->create();
     }
 }

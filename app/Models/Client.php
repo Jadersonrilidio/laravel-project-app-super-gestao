@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LogAccess extends Model
+class Client extends Model
 {
     use HasFactory;
 
@@ -14,12 +14,20 @@ class LogAccess extends Model
      * 
      * @var string
      */
-    protected $table = 'logs_access';
+    protected $table = 'clients';
 
     /**
      * Allow the following table fields named in array to be autocompleted by Eloquent engine.
      * 
      * @var array
      */
-    protected $fillable = ['log'];
+    protected $fillable = ['name'];
+
+    /**
+     * 
+     */
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Order');
+    }
 }

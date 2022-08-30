@@ -13,9 +13,8 @@
 
         <div class="menu">
             <ul>
-                <li><a href="{{ route('product.create') }}">Create</a></li>
-                <li><a href="{{ route('product.index') }}">List</a></li>
-            </ul>
+                <li><a href="{{ route('product_detail.create') }}">Create</a></li>
+                <li><a href="{{ route('product_detail.index') }}">Search</a></li>
             </ul>
         </div>
 
@@ -24,11 +23,16 @@
 
                 <span>{{ $message ?? '' }}</span>
 
-                @component('app.product._components.form_create_edit', [
-                    'units'     => $units,
-                    'suppliers' => $suppliers,
-                ])
+                <h4>Product<h4>
+                <p>Name: {{ $product_detail->product->name }}</p>
+                <p>Description: {{ $product_detail->product->description }}</p>
+                <br>
 
+                @component('app.product_detail._components.form_create_edit', [
+                    'product_detail' => $product_detail,
+                    'units'    => $units,
+                    'products' => $products,
+                ])
                 @endcomponent
 
             </div>
